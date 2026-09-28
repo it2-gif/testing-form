@@ -1,0 +1,239 @@
+* { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 750px;
+            direction: ltr;
+        }
+        h2 { text-align: center; color: #1a237e; margin-top: 0; margin-bottom: 10px; }
+        
+        #camera-view { text-align: center; }
+        #video { width: 100%; max-width: 640px; border-radius: 8px; background: #000; transform: scaleX(-1); }
+        #canvas { display: none; }
+        
+        .btn {
+            background-color: #1a237e; color: white; border: none;
+            padding: 12px 24px; font-size: 16px; border-radius: 5px;
+            cursor: pointer; margin-top: 15px; transition: background 0.3s; font-family: inherit;
+        }
+        .btn:hover { background-color: #0d1457; }
+        .btn-success { background-color: #28a745; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #5a6268; }
+
+        #form-view { display: none; }
+        .header-section {
+            display: grid; grid-template-columns: 145px minmax(0, 1fr) 145px; gap: 22px; align-items: center;
+            margin-bottom: 30px; padding: 18px; border: 1px solid #c7d2fe; border-bottom: 4px solid #1a237e;
+            border-radius: 12px; background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+        }
+        .logo-section {
+            min-height: 135px; display: flex; align-items: center; justify-content: center; padding: 12px;
+            background: #fff; border: 1px solid #d0d5dd; border-radius: 10px;
+        }
+        .logo-section img { width: 120px; max-height: 105px; object-fit: contain; }
+        .form-info { min-width: 0; text-align: center; }
+        .form-info h2 { text-align: center; margin: 0; color: #1a237e; font-size: 36px; line-height: 1.12; }
+        .form-info p { text-align: center; color: #666; margin: 0; }
+        .photo-section {
+            position: relative; width: 145px; height: 145px; border: 3px solid #1a237e; border-radius: 12px;
+            overflow: hidden; display: flex; justify-content: center; align-items: center;
+            background: #fff; flex-shrink: 0; box-shadow: inset 0 0 0 4px #eef2ff;
+        }
+        .photo-section::before {
+    content: 'No photo';
+    color: #667085;
+    font-size: 14px;
+    font-weight: 600;
+}
+.photo-section img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+.photo-section img:not([src]),
+.photo-section img[src=''] { display: none; }
+        
+        .form-group { margin-bottom: 18px; width: 100%; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: bold; color: #333; text-align: left; font-size: 15px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px;
+            font-size: 15px; font-family: inherit; text-align: left; direction: ltr; background-color: #fafafa;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #1a237e; background-color: #fff; }
+        .form-group textarea { min-height: 110px; resize: vertical; }
+        
+        /* Row layout for paired fields */
+        .form-row {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+        }
+        .form-row .form-group {
+            flex: 1; /* Makes both fields take equal width */
+            margin-bottom: 18px;
+        }
+
+        .time-range-container { display: flex; gap: 15px; align-items: center; }
+        .time-input-wrapper { flex: 1; }
+        .time-separator { font-weight: bold; color: #666; margin-top: 24px; }
+        .form-group input[type="time"], .form-group input[type="date"] { cursor: pointer; }
+        
+        .days-container {
+            display: flex; flex-wrap: wrap; gap: 10px; padding: 10px;
+            border: 1px solid #ccc; border-radius: 5px; background-color: #fafafa;
+        }
+        .day-checkbox { display: flex; align-items: center; gap: 5px; font-size: 14px; cursor: pointer; }
+        .day-checkbox input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #1a237e; }
+        .day-checkbox label { margin: 0; cursor: pointer; font-weight: normal; }
+        .done-by-section {
+            margin: 22px 0 6px;
+            padding: 14px 16px;
+            border: 1px solid #d8def8;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+        }
+        .done-by-section label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a237e;
+            font-size: 15px;
+            font-weight: 800;
+        }
+        .done-by-section input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 0;
+            border-bottom: 2px solid #1a237e;
+            background: transparent;
+            color: #111827;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            outline: none;
+        }
+        
+        .actions { text-align: center; margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
+
+        .btn:disabled { opacity: 0.65; cursor: not-allowed; }
+        .status-message {
+            display: none; margin-top: 18px; padding: 12px 14px; border-radius: 6px;
+            text-align: center; font-weight: 600;
+            white-space: pre-line;
+        }
+        .status-message.info { display: block; color: #0c5460; background: #d1ecf1; border: 1px solid #bee5eb; }
+        .status-message.error { display: block; color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; }
+        .camera-note { color: #666; font-size: 13px; margin: 12px auto 0; max-width: 560px; }
+        .required-note { color: #666; font-size: 13px; margin: -8px 0 18px; }
+        .conditional-field { display: none; }
+        .pdf-export {
+            width: 200mm !important;
+            max-width: 200mm !important;
+            padding: 20px !important;
+            box-shadow: none !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 12px !important;
+        }
+        .pdf-export .form-group { margin-bottom: 11px; }
+        .pdf-export .form-row { gap: 14px; }
+        .pdf-export .form-row .form-group { margin-bottom: 11px; }
+        .pdf-export .form-group label {
+            margin-bottom: 5px;
+            color: #111827;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+        }
+        .pdf-export .form-group input,
+        .pdf-export .form-group select,
+        .pdf-export .form-group textarea {
+            padding: 9px 10px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 7px;
+            background: #ffffff;
+            color: #111827;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .pdf-export .form-group textarea { min-height: 78px; }
+        .pdf-export .time-range-container { gap: 14px; }
+        .pdf-export .time-input-wrapper label {
+            margin-top: 4px;
+            font-size: 15px;
+            font-weight: 800;
+        }
+        .pdf-export .days-container {
+            gap: 12px 18px;
+            padding: 12px 14px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 7px;
+            background: #ffffff;
+        }
+        .pdf-export .day-checkbox {
+            gap: 8px;
+            color: #111827;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .pdf-export .day-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+        .pdf-export .day-checkbox label {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .pdf-export .done-by-section {
+            margin-top: 16px;
+            padding: 14px 18px;
+            border: 1.8px solid #1a237e;
+            border-radius: 12px;
+            background: #f8faff;
+        }
+        .pdf-export .done-by-section label {
+            margin-bottom: 8px;
+            color: #1a237e;
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+        }
+        .pdf-export .done-by-section input {
+            padding: 8px 0 6px;
+            border: 0;
+            border-bottom: 2px solid #1a237e;
+            border-radius: 0;
+            background: transparent;
+            color: #111827;
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .pdf-hidden { display: none !important; }
+        .pdf-export .required-note { display: none; }
+
+        @media (max-width: 680px) {
+            body { padding: 10px; align-items: flex-start; }
+            .container { padding: 22px 16px; }
+            .header-section { grid-template-columns: 1fr; justify-items: center; gap: 14px; padding: 16px; }
+            .logo-section { width: 170px; min-height: 120px; }
+            .photo-section { width: 170px; height: 170px; }
+            .form-info h2 { font-size: 34px; }
+            .form-info { padding: 0; }
+            .form-row, .time-range-container, .actions { flex-direction: column; gap: 0; }
+            .actions .btn { width: 100%; }
+        }

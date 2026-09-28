@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "node tests/smoke-test.cjs"
+  },
+  "name": "eacc-placement-test",
+  "private": true,
+  "version": "1.0.0",
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
