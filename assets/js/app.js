@@ -706,7 +706,7 @@ function prepareEmptyFieldsForPdf(root = document) {
                         html2canvas: {
                             scale: 2,
                             useCORS: true,
-                            allowTaint: true,
+                            allowTaint: false,
                             letterRendering: true,
                             scrollY: 0,
                             logging: false

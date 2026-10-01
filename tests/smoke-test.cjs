@@ -33,6 +33,20 @@ async function main() {
     const examLevels = await page.locator('#level option').allTextContents();
     assertSequence(examLevels, ['Eligible PTE', 'Ineligible PTE'], 'PTE levels');
 
+    await page.fill('#name', 'PDF Test Candidate');
+    await page.fill('#mobileNumber', '01000000000');
+    await page.selectOption('#level', 'Eligible PTE');
+    const downloadPromise = page.waitForEvent('download');
+    await page.click('#download-pdf-button');
+    const download = await downloadPromise;
+    if (!download.suggestedFilename().endsWith('.pdf')) {
+        throw new Error(`Expected a PDF download, received ${download.suggestedFilename()}`);
+    }
+    await page.waitForFunction(() => {
+        const status = document.getElementById('status-message');
+        return status && status.textContent.includes('PDF downloaded');
+    });
+
     await page.screenshot({ path: path.join('artifacts', 'desktop-form.png'), fullPage: true });
 
     await page.setViewportSize({ width: 390, height: 844 });
