@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const path = require('path');
+const assert = require('node:assert/strict');
 
 const BASE_URL = process.env.TEST_URL || 'http://127.0.0.1:4173/';
 
@@ -20,14 +21,28 @@ async function main() {
     await page.click('#continue-without-photo-button');
     await page.waitForSelector('#form-view', { state: 'visible' });
 
+    await page.selectOption('#programme', 'Adults');
+    await page.selectOption('#language', 'PTE');
     await page.selectOption('#programme', 'Kids');
+    await assertCampControls(page, ['Summer Camp 1', 'Summer Camp 2', 'Summer Camp 3', 'Winter Camp 1', 'Winter Camp 2']);
     const kidsLevels = await page.locator('#level option').allTextContents();
     assertSequence(kidsLevels, ['Pre 4', 'Foundation', 'Beginner'], 'Kids levels');
 
     await page.selectOption('#programme', 'Youth');
+    await assertCampControls(page, ['Summer Camp 1', 'Summer Camp 2', 'Winter Camp 1', 'Winter Camp 2']);
     const youthLevels = await page.locator('#level option').allTextContents();
     assertSequence(youthLevels, ['Foundation', 'Beginner'], 'Youth levels');
 
+    await page.selectOption('#programme', 'Adults');
+    assert.equal(await page.locator('#language').isVisible(), true);
+    assert.equal(await page.locator('#language').isEnabled(), true);
+    assert.equal(await page.locator('#language').inputValue(), '');
+    assert.equal(await page.locator('#language').evaluate(input => input.required), true);
+    assert.equal(await page.locator('#camp').isVisible(), false);
+    assert.equal(await page.locator('#camp').isDisabled(), true);
+    await page.selectOption('#programme', 'Private');
+    assert.equal(await page.locator('#language').isVisible(), true);
+    assert.equal(await page.locator('#language').evaluate(input => input.required), false);
     await page.selectOption('#programme', 'Adults');
     await page.selectOption('#language', 'PTE');
     const examLevels = await page.locator('#level option').allTextContents();
@@ -59,6 +74,27 @@ async function main() {
 
     console.log('Smoke test passed: assets, routing controls, level ordering, and responsive layout.');
     await browser.close();
+}
+
+async function assertCampControls(page, expectedCamps) {
+    assert.equal(await page.locator('#language-group').isVisible(), false);
+    assert.equal(await page.locator('#language').isDisabled(), true);
+    assert.equal(await page.locator('#language').inputValue(), '');
+    assert.equal(await page.locator('#language').evaluate(input => input.required), false);
+    assert.equal(await page.locator('#camp').isVisible(), true);
+    assert.equal(await page.locator('#camp').evaluate(input => input.required), true);
+    assert.deepEqual(await page.locator('#camp option').allTextContents(), ['-- Select Camp --', ...expectedCamps]);
+    for (const camp of ['Winter Camp 1', 'Winter Camp 2']) {
+        await page.selectOption('#camp', camp);
+        const fields = await page.evaluate(() => {
+            updateRoutingFields();
+            return Object.fromEntries(new FormData(document.getElementById('data-form')));
+        });
+        assert.equal(fields.camp, camp);
+        assert.equal(fields.campFallback, camp);
+        assert.equal(fields.language, undefined);
+        assert.equal(fields.languageFallback, '');
+    }
 }
 
 function assertSequence(values, expected, label) {

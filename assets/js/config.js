@@ -29,13 +29,15 @@ window.EACC_CONFIG = Object.freeze({
         'Summer Camp 1',
         'Summer Camp 2',
         'Summer Camp 3',
-        'Winter Camp'
+        'Winter Camp 1',
+        'Winter Camp 2'
     ]),
 
     youthCamps: Object.freeze([
         'Summer Camp 1',
         'Summer Camp 2',
-        'Winter Camp'
+        'Winter Camp 1',
+        'Winter Camp 2'
     ]),
 
     kidsLevels: Object.freeze([

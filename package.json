@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "node tests/smoke-test.cjs"
+    "test": "node --test tests/routing-test.cjs && node tests/smoke-test.cjs"
   },
   "name": "eacc-placement-test",
   "private": true,

@@ -20,6 +20,7 @@ const video = document.getElementById('video');
         const statusMessage = document.getElementById('status-message');
         const submitButton = document.getElementById('submit-button');
         const programmeInput = document.getElementById('programme');
+        const languageGroup = document.getElementById('language-group');
         const languageInput = document.getElementById('language');
         const campGroup = document.getElementById('camp-group');
         const campInput = document.getElementById('camp');
@@ -186,45 +187,27 @@ function createSubmissionId() {
 
         function updateRoutingFields() {
             const programme = programmeInput.value;
-            const language = languageInput.value;
-            renderLevelField(programme, language);
+            const usesCamp = programme === 'Kids' || programme === 'Youth';
 
-            if (programme === 'Kids') {
-                languageInput.required = false;
-                languageInput.disabled = false;
-                campGroup.style.display = 'block';
-                campInput.required = true;
-                fillCampOptions(KIDS_CAMPS);
-                return;
-            }
-
-            if (programme === 'Youth') {
-                languageInput.required = false;
-                languageInput.disabled = false;
-                campGroup.style.display = 'block';
-                campInput.required = true;
-                fillCampOptions(YOUTH_CAMPS);
-                return;
-            }
-
-            if (programme === 'Private') {
-                languageInput.disabled = false;
-                languageInput.required = false;
-                campGroup.style.display = 'none';
-                campInput.required = false;
-                campInput.value = '';
-                return;
-            }
-
-            languageInput.disabled = false;
+            languageGroup.hidden = usesCamp;
+            languageInput.disabled = usesCamp;
             languageInput.required = programme === 'Adults';
-            campGroup.style.display = 'none';
-            campInput.required = false;
-            campInput.value = '';
-
-            if (programme === 'Adults') {
-                return;
+            if (usesCamp) {
+                languageInput.value = '';
             }
+
+            campGroup.style.display = usesCamp ? 'block' : 'none';
+            campInput.disabled = !usesCamp;
+            campInput.required = usesCamp;
+
+            if (usesCamp) {
+                fillCampOptions(programme === 'Kids' ? KIDS_CAMPS : YOUTH_CAMPS);
+            } else {
+                campInput.value = '';
+            }
+
+            renderLevelField(programme, languageInput.value);
+            syncRoutingFallbackFields();
         }
 
         function syncRoutingFallbackFields() {
