@@ -29,22 +29,18 @@ const ADULT_LANGUAGE_SHEETS = Object.freeze({
   'French': 'FRENCH'
 });
 
-const WINTER_CAMP_SHEETS = Object.freeze({
-  'Winter Camp 1': 1125972872,
-  'Winter Camp 2': 100630474
-});
-
 const KIDS_CAMP_SHEETS = Object.freeze({
   'Summer Camp 1': 'Summer Camp Kids - Camp 1',
   'Summer Camp 2': 'Summer Camp Kids - Camp 2',
   'Summer Camp 3': 'Summer Camp Kids - Camp 3',
-  ...WINTER_CAMP_SHEETS
+  'Winter Camp Kids 1': 1125972872,
+  'Winter Camp Kids 2': 100630474
 });
 
 const YOUTH_CAMP_SHEETS = Object.freeze({
   'Summer Camp 1': 'Summer Camp Youths - Camp 1',
   'Summer Camp 2': 'Summer Camp Youths - Camp 2',
-  ...WINTER_CAMP_SHEETS
+  'Winter Camp Youth': 729068088
 });
 
 function doGet() {
@@ -496,8 +492,9 @@ function normalizeCamp_(value) {
     '3': 'Summer Camp 3',
     'camp 3': 'Summer Camp 3',
     'summer camp 3': 'Summer Camp 3',
-    'winter camp 1': 'Winter Camp 1',
-    'winter camp 2': 'Winter Camp 2'
+    'winter camp kids 1': 'Winter Camp Kids 1',
+    'winter camp kids 2': 'Winter Camp Kids 2',
+    'winter camp youth': 'Winter Camp Youth'
   };
 
   return aliases[normalized] || '';

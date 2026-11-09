@@ -24,12 +24,13 @@ async function main() {
     await page.selectOption('#programme', 'Adults');
     await page.selectOption('#language', 'PTE');
     await page.selectOption('#programme', 'Kids');
-    await assertCampControls(page, ['Summer Camp 1', 'Summer Camp 2', 'Summer Camp 3', 'Winter Camp 1', 'Winter Camp 2']);
+    await assertCampControls(page, ['Summer Camp 1', 'Summer Camp 2', 'Summer Camp 3', 'Winter Camp Kids 1', 'Winter Camp Kids 2']);
     const kidsLevels = await page.locator('#level option').allTextContents();
     assertSequence(kidsLevels, ['Pre 4', 'Foundation', 'Beginner'], 'Kids levels');
 
     await page.selectOption('#programme', 'Youth');
-    await assertCampControls(page, ['Summer Camp 1', 'Summer Camp 2', 'Winter Camp 1', 'Winter Camp 2']);
+    assert.equal(await page.locator('#camp').inputValue(), '');
+    await assertCampControls(page, ['Summer Camp 1', 'Summer Camp 2', 'Winter Camp Youth']);
     const youthLevels = await page.locator('#level option').allTextContents();
     assertSequence(youthLevels, ['Foundation', 'Beginner'], 'Youth levels');
 
@@ -84,7 +85,7 @@ async function assertCampControls(page, expectedCamps) {
     assert.equal(await page.locator('#camp').isVisible(), true);
     assert.equal(await page.locator('#camp').evaluate(input => input.required), true);
     assert.deepEqual(await page.locator('#camp option').allTextContents(), ['-- Select Camp --', ...expectedCamps]);
-    for (const camp of ['Winter Camp 1', 'Winter Camp 2']) {
+    for (const camp of expectedCamps.filter(camp => camp.startsWith('Winter Camp'))) {
         await page.selectOption('#camp', camp);
         const fields = await page.evaluate(() => {
             updateRoutingFields();
